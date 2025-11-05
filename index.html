@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Welcome to Blood Bank Management System</h1>
+        <p class="hero-subtitle">Saving Lives Through Intelligent Donor Matching</p>
+        <p>Using advanced K-Nearest Neighbors algorithm to connect blood donors with patients in need</p>
+        
+        <div class="hero-buttons">
+            {% if not session.user_id %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+            {% else %}
+                <a href="{{ url_for('search_donors') }}" class="btn btn-primary">Find Donors</a>
+                {% if session.user_type == 'donor' %}
+                    <a href="{{ url_for('donor_register') }}" class="btn btn-secondary">Register as Donor</a>
+                {% elif session.user_type == 'patient' %}
+                    <a href="{{ url_for('patient_request') }}" class="btn btn-secondary">Request Blood</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>KNN Algorithm</h3>
+            <p>Intelligent donor matching using Machine Learning for optimal compatibility</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>Location Based</h3>
+            <p>Find nearest donors using geographical proximity calculations</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Real-time Matching</h3>
+            <p>Instant donor-patient matching with priority-based ranking</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Smart Analytics</h3>
+            <p>Comprehensive dashboard with real-time statistics and insights</p>
+        </div>
+    </div>
+</div>
+
+<div class="stats-section">
+    <h2>System Overview</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Donors</h3>
+            <p class="stat-number">{{ total_donors }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Blood Requests</h3>
+            <p class="stat-number">{{ total_patients }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Success Rate</h3>
+            <p class="stat-number">98%</p>
+        </div>
+        <div class="stat-card">
+            <h3>Response Time</h3>
+            <p class="stat-number">< 5min</p>
+        </div>
+    </div>
+</div>
+
+<div class="blood-groups-section">
+    <h2>Supported Blood Groups</h2>
+    <div class="blood-groups-grid">
+        {% for group in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+        <div class="blood-group-card {{ group|replace('+', 'positive')|replace('-', 'negative') }}">
+            <span class="blood-group-symbol">{{ group }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

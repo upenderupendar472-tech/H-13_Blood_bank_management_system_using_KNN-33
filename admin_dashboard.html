@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h2>Admin Dashboard</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card admin-stat">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h3>Total Donors</h3>
+                <p class="stat-number">{{ total_donors }}</p>
+            </div>
+        </div>
+        
+        <div class="stat-card admin-stat">
+            <div class="stat-icon">🩺</div>
+            <div class="stat-info">
+                <h3>Total Patients</h3>
+                <p class="stat-number">{{ total_patients }}</p>
+            </div>
+        </div>
+        
+        <div class="stat-card admin-stat">
+            <div class="stat-icon">💼</div>
+            <div class="stat-info">
+                <h3>Active Requests</h3>
+                <p class="stat-number">{{ recent_requests|length }}</p>
+            </div>
+        </div>
+        
+        <div class="stat-card admin-stat">
+            <div class="stat-icon">📈</div>
+            <div class="stat-info">
+                <h3>Success Rate</h3>
+                <p class="stat-number">98%</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-sections">
+        <div class="dashboard-section">
+            <h3>Blood Inventory</h3>
+            <div class="inventory-grid">
+                {% for item in blood_inventory %}
+                <div class="inventory-item">
+                    <span class="blood-type {{ item.blood_group|replace('+', 'positive')|replace('-', 'negative') }}">
+                        {{ item.blood_group }}
+                    </span>
+                    <span class="units-available">{{ item.units_available }} units</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h3>Recent Blood Requests</h3>
+            <div class="requests-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Blood Group</th>
+                            <th>Location</th>
+                            <th>Units</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in recent_requests %}
+                        <tr>
+                            <td>{{ request.name }}</td>
+                            <td>
+                                <span class="blood-badge small {{ request.blood_group|replace('+', 'positive')|replace('-', 'negative') }}">
+                                    {{ request.blood_group }}
+                                </span>
+                            </td>
+                            <td>{{ request.location }}</td>
+                            <td>{{ request.units_needed }}</td>
+                            <td>
+                                <span class="urgency-badge {{ request.urgency|lower }}">
+                                    {{ request.urgency }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge {{ request.status|lower|replace(' ', '-') }}">
+                                    {{ request.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-actions">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <button class="btn btn-primary">Update Inventory</button>
+            <button class="btn btn-secondary">Generate Report</button>
+            <button class="btn btn-danger">System Settings</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
